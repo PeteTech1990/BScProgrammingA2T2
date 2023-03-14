@@ -33,21 +33,27 @@ main_board = gameboard
 
 LIST scoreboard = []
 
-#POPULATEDECK function
-    int ID = 1
-    FOR SUIT in suits (FOR EACH OF THE SUITS):
-        FOR count in range(13) (FOR EACH OF THE VALUES):
-            current_card = card
-            current_card.setsuit(SUIT)
-            if count < 10:
-                current_card.setval(count)
-            else:
-                current_card.setval(values[count-9])
-            
-            current_card.ID = ID
-            ID += 1
+#POPULATEDECK function (ROUND_COUNT)
+    if (ROUND_COUNT == 0):
+        int ID = 1
+        FOR SUIT in suits (FOR EACH OF THE SUITS):
+            FOR count in range(13) (FOR EACH OF THE VALUES):
+                current_card = card
+                current_card.setsuit(SUIT)
+                if count < 10:
+                    current_card.setval(count)
+                else:
+                    current_card.setval(values[count-9])
+                
+                current_card.ID = ID
+                ID += 1
 
-            main_deck.cards.append(current_card)
+                main_deck.cards.append(current_card)
+    else:
+        for count in len(p1_deck.cards):
+            main_deck.cards.append(p1deck.cards.pop())
+        for count in len(p2_deck.cards):
+            main_deck.cards.append(p2deck.cards.pop())
 
 #SHUFFLE function
 using RANDOM module
@@ -75,7 +81,7 @@ MAIN PROGRAM START
 
 while ROUND_COUNT < 6
 
-    POPULATEDECK
+    POPULATEDECK(ROUND_COUNT)
 
     SHUFFLEDECK
 
