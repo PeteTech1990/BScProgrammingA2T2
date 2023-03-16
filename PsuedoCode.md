@@ -12,10 +12,6 @@
     #FUNCTION setval(string):
         VAL = string
 
-#CLASS gameboard
-    LIST (card) p1_space
-    LIST (card) p2_space
-
 #LIST suits = ["♠", "♥", "♣", "♦"]
 #LIST values = ["J", "Q", "K", "A"]
 
@@ -28,8 +24,8 @@ p1_deck = deck
 #P2Deck object to hold player 2's deck
 p2_deck = deck
 
-#MAINBOARD object to act as game board
-main_board = gameboard
+#MAINBOARD list to act as game board
+main_board = []
 
 LIST scoreboard = []
 
@@ -109,15 +105,16 @@ while ROUND_COUNT < 6
                 if len(p1_deck.cards) > len(p2_deck.cards):
                     ERROR - Player 2 must play a card next
                 else:
-                    main_board.p1_space.append(p1_deck.cards.pop())
+                    main_board.append(p1_deck.cards.pop())
             case K:
-                main_board.p2_space.append(p2_deck.cards.pop())
+                if len(p2_deck.cards) > len(p1_deck.cards):
+                    ERROR - Player 1 must play a card next
+                else:
+                    main_board.append(p2_deck.cards.pop())
             case Q:
-                if p1_space.empty() == TRUE:
+                if main_board.empty() == TRUE:
                     ERROR
-                elif p2_space.empty() == TRUE:
-                    ERROR
-                elif main_board.p1_space[-1].VALUE == main_board.p2_space[-1].VALUE:
+                elif main_board[-1].VALUE == main_board[-2].VALUE:
                     SNAP
                     scoreboard.append(1)
                     ROUND_CONTINUE = FALSE
@@ -125,11 +122,9 @@ while ROUND_COUNT < 6
                 else:
                     NO SNAP
             case P:
-                if p1_space.empty() == TRUE:
+                if main_board.empty() == TRUE:
                     ERROR
-                elif p2_space.empty() == TRUE:
-                    ERROR
-                elif main_board.p2_space[-1].VALUE == main_board.p1_space[-1].VALUE:
+                elif main_board[-1].VALUE == main_board[-2].VALUE:
                     SNAP
                     scoreboard.append(2)
                     ROUND_CONTINUE = FALSE
