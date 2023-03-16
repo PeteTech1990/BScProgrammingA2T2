@@ -17,6 +17,8 @@
 #==========================IMPORTING MODULES================================
 
 import random #--RandRange method of random module will be used in the function for shuffling the main deck
+import os
+
 
 
 #============================================================================================================================================================================
@@ -233,29 +235,93 @@ main_deck = DECK()
 
 #=============================DEFINING FUNCTIONS====================================
 
+def check_snap():
+            
+        card_val1 = gameboard[-1].getFVal()
+        card_val2 = gameboard[-2].getFVal()
+        
+        if card_val1 == card_val2: 
+            print("SNAP")
 
+
+#===================================================================================
         
 main_deck.populateDeck()#--Invokation of "populateDeck" method, for the "main_deck" DECK object, using dot notation
-main_deck.shuffle()
-p1_deck, p2_deck = main_deck.deal()
 
-def check_snap():
+
+round_count = 0
+
+while (round_count < 6):
+    
+    main_deck.shuffle()
+    p1_deck, p2_deck = main_deck.deal()
+    round_continue = True
+    
+    print("")
+    input("PRESS ANY KEY TO BEGIN")
+    print("")
+    
+    
+    
+    
+    while round_continue == True:
         
-    card_val1 = gameboard[-1].getFVal()
-    card_val2 = gameboard[-2].getFVal()
-    
-    if card_val1 == card_val2: 
-        print("SNAP")
+        os.system('cls')
+        
+        if len(gameboard) == 0:
+            print("Top Card: ")
+        else:
+            print("Top Card: {}".format(gameboard[-1]))
 
-gameboard.append(p1_deck.pop())
-print(gameboard[-1])
+        key_pressed = str(input()).upper()
+        
+        match key_pressed:
+            case "D":
+                if len(p1_deck) < len(p2_deck):
+                    print("")
+                    print("ERROR - Player 2 must play a card next")
+                    print("")
+                    input()
+                else:
+                    gameboard.append(p1_deck.pop())
+            #case K:
+              #  if len(p2_deck.cards) > len(p1_deck.cards):
+              #      ERROR - Player 1 must play a card next
+             #   else:
+              #      main_board.append(p2_deck.cards.pop())
+           # case Q:
+           #     if main_board.empty() == TRUE:
+            #        ERROR
+            #    elif main_board[-1].VALUE == main_board[-2].VALUE:
+            #        SNAP
+             #       scoreboard.append(1)
+               #     ROUND_CONTINUE = FALSE
+              #      ROUND_COUNT += 1
+              #  else:
+           #         NO SNAP
+            #case P:
+             #   if main_board.empty() == TRUE:
+             #       ERROR
+             #   elif main_board[-1].VALUE == main_board[-2].VALUE:
+             #       SNAP
+              #      scoreboard.append(2)
+              #      ROUND_CONTINUE = FALSE
+             #       ROUND_COUNT += 1
+             #   else:
+             #       NO SNAP
 
-for count in range(25):
-    gameboard.append(p2_deck.pop())
-    print(gameboard[-1])
-    check_snap()
-    
+            
+                
+
     gameboard.append(p1_deck.pop())
     print(gameboard[-1])
-    check_snap()
-    
+
+    for count in range(25):
+        gameboard.append(p2_deck.pop())
+        print(gameboard[-1])
+        check_snap()
+        
+        gameboard.append(p1_deck.pop())
+        print(gameboard[-1])
+        check_snap()
+        
