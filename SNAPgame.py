@@ -190,8 +190,14 @@ class CARD:
      #   self.ID = id_to_set
      
     def __str__(self):
-        return "|{:^3}{:^3}|".format(self.suit, self.fvalue)
-        
+        return """------------
+|{:<5}{:>5}|
+|          |
+|{:^10}|
+|          |
+|{:<5}{:>5}|
+------------""".format(self.fvalue, self.fvalue, self.suit, self.fvalue, self.fvalue)
+                  
     def getSuit(self):
         return self.suit
         
@@ -351,9 +357,10 @@ while (round_count < 5):
         if len(gameboard) == 0:
             print("Top Card: ")
         else:
-            print("Top Card: {}".format(gameboard[-1]))
-
-        print("")
+            print("Top Card:")
+            print("")
+            print("{}".format(gameboard[-1]))
+        
         key_pressed = str(input("Press a key, then press ENTER: ")).upper()
         
         
