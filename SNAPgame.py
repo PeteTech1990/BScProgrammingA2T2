@@ -154,10 +154,11 @@ class DECK:
         return pdeck1,pdeck2
     
     
-    def returnCards(self, deck):
+    def returnCards(self, cards):
         
-        for card in deck:
+        for card in cards:
             self.cards.append(card)
+        return []
             #p1_deck.cards.append(main_deck.cards.pop())
             #p2_deck.cards.append(main_deck.cards.pop())
     
@@ -235,93 +236,185 @@ main_deck = DECK()
 
 #=============================DEFINING FUNCTIONS====================================
 
-def check_snap():
-            
-        card_val1 = gameboard[-1].getFVal()
-        card_val2 = gameboard[-2].getFVal()
+def check_snap(player):
+              
         
-        if card_val1 == card_val2: 
-            print("SNAP")
+        if len(gameboard) < 2:
+            print("")
+            print("ERROR - There aren't enough cards in play to SNAP!")
+            print("")
+            return True
+        else:
+            card_val1 = gameboard[-1].getFVal()
+            card_val2 = gameboard[-2].getFVal()
+        
+            if card_val1 == card_val2: 
+                print("")
+                print("SNAP! Player {} wins this round!".format(str(player)))
+                print("")
+                scoreboard.append(player)
+                return False
+            else:
+                print("")
+                print("NO SNAP! The cards do not match. No cheating!")
+                print("")
+                return True
 
+def printInstructions():
+    print("")
+    print("Classic SNAP! card game")
+    print("=======================")
+    print("")
+    print("")
+    print("Instructions:")
+    print("")
+    print("This is a 2 player game where players must attempt to SNAP a duplicate card before the other player can.")
+    print("")
+    print("On each round, players will be dealt 26 card. WHen it is their turn, they must deal a card onto the gameboard from their deck")
+    print("Player 1's DEAL key is 'D' and Player 2's DEAL key is 'K'")
+    print("Each time a card a dealt, only the most recently dealt card will be visible on the gameboard")
+    print("")
+    print("If a player notices that the most recent card's face value (2, 3, 4...J, Q, K etc) matches the face value of the previous card, then they")
+    print("can press their SNAP key to try to win the round")
+    print("Player 1's SNAP key is 'Q' and Player 2's SNAP key is 'P'")
+    print("If the last 2 cards are a match, then the first player to press their SNAP key wins the round")
+    print("")
+    print("5 rounds are played and the player with the most rounds won is declared the overall winner of the game!")
+    print("")
+    print("")
+    
+def printControls():
+    print("")
+    print("Classic SNAP! card game")
+    print("=======================")
+    print("")
+    print("")
+    print("Player 1 controls: Press D to deal a card and press Q to SNAP")
+    print("Player 2 controls: Press K to deal a card and press P to SNAP")
+    print("REMEMBER: you must also press ENTER after each key")
+    print("")
+    
+def printScoreboard():
+    os.system("cls")
+    print("")
+    print("==SCOREBOARD==")
+    print("--------------")
+    print("")
+    print("")
+    print("---------------------")
+    print("| Player    | Score |")
+    print("|-----------|-------|")
+    print("| Player 1  |{:^7}|".format(scoreboard.count(1)))
+    print("| Player 2  |{:^7}|".format(scoreboard.count(2)))
+    print("---------------------")
+    print("")
+    print("")
+    input("Press ENTER to continue")
+    
+def getWinner():
+    if scoreboard.count(1) > scoreboard.count(2):
+        return 1
+    else:
+        return 2
 
 #===================================================================================
         
 main_deck.populateDeck()#--Invokation of "populateDeck" method, for the "main_deck" DECK object, using dot notation
 
+printInstructions()
 
-round_count = 0
+print("")
+input("PRESS ANY KEY TO BEGIN")
+print("")
 
-while (round_count < 6):
+round_count = 1
+
+while (round_count < 5):
     
     main_deck.shuffle()
     p1_deck, p2_deck = main_deck.deal()
     round_continue = True
-    
-    print("")
-    input("PRESS ANY KEY TO BEGIN")
-    print("")
-    
-    
-    
+    round_count = len(scoreboard)+1
+      
+    last_player = 0   
     
     while round_continue == True:
         
         os.system('cls')
+        
+        printControls()
+        
+        print("Round: {}".format(str(round_count)))
+        print("==========")
+        print("")
         
         if len(gameboard) == 0:
             print("Top Card: ")
         else:
             print("Top Card: {}".format(gameboard[-1]))
 
-        key_pressed = str(input()).upper()
+        print("")
+        key_pressed = str(input("Press a key, then press ENTER: ")).upper()
+        
         
         match key_pressed:
             case "D":
-                if len(p1_deck) < len(p2_deck):
+                if last_player == 1:
                     print("")
                     print("ERROR - Player 2 must play a card next")
                     print("")
                     input()
+                elif len(p1_deck) == 0:
+                    print("")
+                    print("ERROR - Player 1 has no more cards. Cards will be re-dealt and the round will begin again")
+                    print("")
+                    input()
+                    round_continue = False
                 else:
                     gameboard.append(p1_deck.pop())
-            #case K:
-              #  if len(p2_deck.cards) > len(p1_deck.cards):
-              #      ERROR - Player 1 must play a card next
-             #   else:
-              #      main_board.append(p2_deck.cards.pop())
-           # case Q:
-           #     if main_board.empty() == TRUE:
-            #        ERROR
-            #    elif main_board[-1].VALUE == main_board[-2].VALUE:
-            #        SNAP
-             #       scoreboard.append(1)
-               #     ROUND_CONTINUE = FALSE
-              #      ROUND_COUNT += 1
-              #  else:
-           #         NO SNAP
-            #case P:
-             #   if main_board.empty() == TRUE:
-             #       ERROR
-             #   elif main_board[-1].VALUE == main_board[-2].VALUE:
-             #       SNAP
-              #      scoreboard.append(2)
-              #      ROUND_CONTINUE = FALSE
-             #       ROUND_COUNT += 1
-             #   else:
-             #       NO SNAP
-
-            
+                    last_player = 1
+            case "K":
+                if last_player == 2:
+                    print("")
+                    print("ERROR - Player 1 must play a card next")
+                    print("")
+                    input()
+                elif len(p2_deck) == 0:
+                    print("")
+                    print("ERROR - Player 2 has no more cards. Cards will be re-dealt and the round will begin again")
+                    print("")
+                    input()
+                    round_continue = False
+                else:
+                    gameboard.append(p2_deck.pop())
+                    last_player = 2
+            case "P":
+                round_continue = check_snap(2)
+                input()
+            case "Q":
+                round_continue = check_snap(1)
+                input()
+            case default:
+                print("")
+                print("ERROR - Invalid key pressed. Only 'D', 'K', 'Q' and 'P' are valid")
+                print("")
+                input()       
                 
+    gameboard = main_deck.returnCards(gameboard)
+    p1_deck = main_deck.returnCards(p1_deck)
+    p2_deck = main_deck.returnCards(p2_deck)  
+    
+    printScoreboard()  
 
-    gameboard.append(p1_deck.pop())
-    print(gameboard[-1])
+print("")
+print("")
+print("GAME OVER")
+print("")
+print("=====================================================================")
+print("||After 5 rounds, the overall winner is Player {}! Congratulations!||".format(getWinner()))
+print("=====================================================================")
+print("")
+print("")
+input("Press ENTER to quit")           
 
-    for count in range(25):
-        gameboard.append(p2_deck.pop())
-        print(gameboard[-1])
-        check_snap()
-        
-        gameboard.append(p1_deck.pop())
-        print(gameboard[-1])
-        check_snap()
         
