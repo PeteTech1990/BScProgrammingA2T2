@@ -234,8 +234,31 @@ class CARD:
         self.fvalue = fvalue_to_set#--"fvalue" string variable/attribute will contain the face value for the new CARD object. 
         self.ID = id_to_set#--"ID" integer variable/attribute will contain a unique ID for the new CARD object. 
     
-         
+    
+    #--Defined the str method for the "CARD" class. This method is automatically called whenever an object of the CARD class is passed
+    #--as a parameter to the "print" function. In essence, this method defines the behaviour of a CARD object when it is outputted to the screen.
+    #--The method accepts one parameter, which is assigned to the variable "self". "Self" will store a particular instance of
+    #--a CARD object so that the program can print the state data within that instance. The state data it will print is the object's "suit" value,
+    #--and "face" value.
+    #--The method will return a multi-line string that resembles a real-life playing card. The output will be a rectangular shape, stood up on one of
+    #--it's shorter sides. In each corner of the rectangle, the CARD object's "fvalue" value will be printed. In the centre of the rectangle, the
+    #--CARD object's "suit" value will be printed
     def __str__(self):
+        
+        #--Using the format method for the returned string, a multi-line string will be created, using placeholder braces to insert the "fvalue" and
+        #--"suit" values into the correct places. The first and last rows of the string is a line of "-" symbols. These represent the top and bottom sides
+        #--of the card. The second and sixth rows of the string contain a "|" symbol on the left and right sides, representing the sides of the card. Also, 
+        #--these rows contain 2 placeholder {}, which use the formatting type :<5 and :>5, meaning the values that will be held within these braces will be
+        #--left and right aligned within a 5 character space, respectively. The value passed into these 2 placeholders is the CARD's "fvalue" or face value. 
+        #--This emulates the 2 face values that appear at the top of a playing card. The total space between the two "|" symbols is 10 characters.
+        #--The third and fifth rows of the string contain a "|" symbol on the left and right sides, representing the sides of the card. Also, 
+        #--these rows contain a 10 characater gap between the "|"symbols. 
+        #--These lines emulate the gap between the face values and the suit symbol on a real playing card.
+        #--Finally, the fourth row of the string contains a "|" symbol on the left and right sides, representing the sides of the card. Also, 
+        #--this row contain 1 placeholder {}, which uses the formatting type :^10, meaning the value that will be held within this brace will
+        #--be centrally aligned within a 10 character space, respectively. The value passed into these 2 placeholders is the CARD's "suit" value. 
+        #--This emulates the suit symbol that appears in the centre of a playing card. The total space between the two "|" symbols is 10 characters.
+        #--Altogether, these seven rows produce a multiline string that resembles a real-life playing card.
         return """------------
 |{:<5}{:>5}|
 |          |
@@ -243,13 +266,45 @@ class CARD:
 |          |
 |{:<5}{:>5}|
 ------------""".format(self.fvalue, self.fvalue, self.suit, self.fvalue, self.fvalue)
-                  
+    
+    #--Defined a method called "getSuit" The method accepts one parameter, which is assigned to the variable "self". 
+    #--"Self" will store a particular instance of a CARD object so that the program can work on the state data within that instance. 
+    #--The state data it will work on is the object's "suit" value.
+    #--The method will return the "suit" string value belonging to the particular instance of the CARD class that called this method.
+    #--The purpose of this method is to provide a way for the program to query the "suit" value for a particular CARD object
+    #--without being able to access or change the specific value itself. The "suit" value will remain "private" in terms of its encapsulation.
+    #--This is to ensure that the "suit" variables for specific CARD objects do not interfere with each other and cannot be accidentally changed by
+    #--other parts of the code. The "suit" value of a CARD object should not change once the CARD has been instantiated, as it is representing a
+    #--a real-life card, which cannot change its suit.
+    #--Only the "getSuit" function, within the specific instance of the CARD object, will be able to access the "suit" value for that object.        
     def getSuit(self):
         return self.suit
-        
+    
+    
+    #--Defined a method called "getFVal" The method accepts one parameter, which is assigned to the variable "self". 
+    #--"Self" will store a particular instance of a CARD object so that the program can work on the state data within that instance. 
+    #--The state data it will work on is the object's "fvalue" value.
+    #--The method will return the "fvalue" string value belonging to the particular instance of the CARD class that called this method.
+    #--The purpose of this method is to provide a way for the program to query the "fvalue" value for a particular CARD object
+    #--without being able to access or change the specific value itself. The "fvalue" value will remain "private" in terms of its encapsulation.
+    #--This is to ensure that the "fvalue" variables for specific CARD objects do not interfere with each other and cannot be accidentally changed by
+    #--other parts of the code. The "fvalue" value of a CARD object should not change once the CARD has been instantiated, as it is representing a
+    #--a real-life card, which cannot change its face value.
+    #--Only the "getFVal" function, within the specific instance of the CARD object, will be able to access the "fvalue" value for that object.       
     def getFVal(self):
         return self.fvalue   
     
+    
+    #--Defined a method called "getID" The method accepts one parameter, which is assigned to the variable "self". 
+    #--"Self" will store a particular instance of a CARD object so that the program can work on the state data within that instance. 
+    #--The state data it will work on is the object's "ID" value.
+    #--The method will return the "ID" string value belonging to the particular instance of the CARD class that called this method.
+    #--The purpose of this method is to provide a way for the program to query the "ID" value for a particular CARD object
+    #--without being able to access or change the specific value itself. The "ID" value will remain "private" in terms of its encapsulation.
+    #--This is to ensure that the "ID" variables for specific CARD objects do not interfere with each other and cannot be accidentally changed by
+    #--other parts of the code. The "ID value of a CARD object should not change once the CARD has been instantiated, as it is representing a
+    #--a real-life card, which cannot change its face value.
+    #--Only the "getID" function, within the specific instance of the CARD object, will be able to access the "ID" value for that object. 
     def getID(self):
         return self.ID  
         
@@ -264,12 +319,13 @@ suits = ["♠", "♥", "♣", "♦"]
 #--(Jack, Queen, King and Ace)
 fvalues = ["J", "Q", "K", "A"]
 
-#--Declared a list variable called "gameboard" that will represent the main game board for the card game. With each card that is played, a card 
-#--object will be appended to the "gameboard" list
+#--Declared a list variable called "gameboard" that will represent the main game board for the card game. With each card that is played in a round, a card 
+#--object will be appended to the "gameboard" list. At the end of each round, the "gameboard" list will be cleared
 gameboard = []
 
 #--Declared a list variable called "scoreboard" that will represent the scoreboard for the card game. Each time a player wins a round, an integer value
-#--will be added to the list, representing the player that won the round
+#--will be appended to the list, representing the player that won the round. E.g if Player 2 won the round, a 2 integer value would be appended 
+#--to the "scoreboard" list
 scoreboard = []
 
 
@@ -280,6 +336,8 @@ scoreboard = []
 #--Declared a new instance of a DECK class object, called "main_deck". This object will respresent the main deck of 52 cards for the game.
 #--This object will be populated with 52 CARD objects at the beginning of the game. All of the CARD object will return to this object at the
 #--end of every round, in order to be re-shuffled and re-dealt to the player DECK objects.
+#--The __init__ initialiser method is called automatically when this object is instantiated. The initialiser method will create the 52 CARD objects
+#--for the game and append each one to the "cards" instance list variable for the "main_deck" DECK object.
 main_deck = DECK()
 
 
@@ -288,29 +346,73 @@ main_deck = DECK()
 
 #=============================DEFINING FUNCTIONS====================================
 
+#--Defined a function called "check_snap". The function accepts one parameter, which will be assigned to the "player" variable. 
+#--The function will return a boolean value back to the line that called the function.
+#--The purpose of this function is to check whether a player's SNAP! call is valid. 
+#--After a card is played during a round, each player will have the opportunity to press their "SNAP" key if they believe the face value of
+#--the current CARD object on the gameboard matches the face value of the previous CARD object (as in a game of SNAP). This function checks 
+#--if the player is correct. If the 2 CARD object are a match, the function will return "False" (because the boolean value is passed back and 
+#--assigned to the variable "round_continue". A value of False means the WHILE loop for the current round does not need to loop again, as a 
+#--player has successfully matched 2 cards and the round is over.) If the 2 CARD objects are not a match, the function will return "True" 
+#--and the round will continue.
+#--The number of the player that called SNAP is passed to the function and assigned to the "player" variable.
 def check_snap(player):
               
+    #--IF statement code block will execute if length of the "gameboard" list is less than 2 
+    #--(This means that there is either 1 or 0 CARD objects in the gameboard list, so there aren't enough CARD objects in the list to 
+    #--compare for a match. At least 2 CARD objects are needed before a match can be checked)
+    #--The purpose of this IF statement is to prevent an error occuring from trying to compare 2 objects from the gameboard
+    #--list when there aren't enough objects in the list
+    if len(gameboard) < 2:
+        #--The IF statement code block prints out 2 blank lines, plus an error message stating that there aren't enough cards in play
+        #--for a SNAP to occur. Finally, the block returns a "True" boolean value back to the line that called the function, meaning the
+        #--WHILE loop for the current round will need to loop again, so the round can continue.
+        print("")
+        print("ERROR - There aren't enough cards in play to SNAP!")
+        print("")
+        return True
+    
+    #--ELSE statement code block will execute if length of the "gameboard" list is more than or equal to 2 
+    #--(This means that there is at least 2 CARD objects in the gameboard list, so there are enough CARD objects in the list to 
+    #--compare for a match.) The purpose of this ELSE statement is to compare the 2 CARD objects currently in the last 2 indicies of the "gameboard"
+    #--list. These 2 CARD object represent the last 2 cards to be placed on the gameboard, during the round. The code block uses a nested 
+    #--IF ELSE block to test whether there is a match between the face values of the 2 CARD objects
+    else:
+                
+        #--IF statement code block will execute if the face values (fvalue) of the 2 CARD objects in the last 2 indices of the "gameboard" list are equal.
+        #--The last 2 indices of the "gameboard" list are obtained using the "-1" and "-2" integers as the index values. Using -1 and -2 will
+        #--ensure that that last 2 indices are always obtained, no matter the length of the "gameboard" list
+        #--The "fvalue" values for each CARD object are returned when the "getFVal" methods for each of the CARD objects are called.
+        #--These fvalues are returned for the CARD objects at indices -1 and -2 in the "gameboard" list and are then compared
+        #--If they are a match, then the player that called SNAP is correct and they have won this round. The function will return a boolean value
+        #--of "False", meaning the WHILE loop for the current round does not need to loop again.
         
-        if len(gameboard) < 2:
+        if gameboard[-1].getFVal() == gameboard[-2].getFVal(): 
+            #--The IF statement code block prints out 2 blank lines, plus a success message stating that player that called SNAP is correct and has won
+            #--the round. The success message string uses the format method to insert the number of the player that called SNAP into the placeholder
+            #--braces within the string.
+            #--The number of the player that called SNAP was passed to the function and assigned to the variable "player". The value that was passed
+            #--is an integer value, so before it is inserted into the placeholder braces, it is converted to a string value using the "str" function.
+            #--After the 2 blank lines and the success message, the value that is currently held in the "player" variable (the number of the player who
+            #--called SNAP) is appended to the "scoreboard" list. The purpose of this is to record the winner of the current round, so that after
+            #--5 rounds, an overall winner can be declared, based on the mode value within the "scoreboard" list. For a full explanation of this, see the
+            #--"printScoreboard" function below. 
+            #--Finally, the block returns a "False" boolean value back to the line that called the function, meaning the
+            #--WHILE loop for the current round will not need to loop again, and the current round can end.
             print("")
-            print("ERROR - There aren't enough cards in play to SNAP!")
+            print("SNAP! Player {} wins this round!".format(str(player)))
+            print("")
+            scoreboard.append(player)
+            return False
+        else:
+            #--The ELSE statement code block prints out 2 blank lines, plus a failure message stating that player that called SNAP is incorrect 
+            #--and is possibly trying to cheat. 
+            #--Finally, the block returns a "True" boolean value back to the line that called the function, meaning the
+            #--WHILE loop for the current round will need to loop again, so the round can continue.
+            print("")
+            print("NO SNAP! The cards do not match. No cheating!")
             print("")
             return True
-        else:
-            card_val1 = gameboard[-1].getFVal()
-            card_val2 = gameboard[-2].getFVal()
-        
-            if card_val1 == card_val2: 
-                print("")
-                print("SNAP! Player {} wins this round!".format(str(player)))
-                print("")
-                scoreboard.append(player)
-                return False
-            else:
-                print("")
-                print("NO SNAP! The cards do not match. No cheating!")
-                print("")
-                return True
 
 def printInstructions():
     print("")
