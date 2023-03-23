@@ -6,8 +6,8 @@
 #SNAP card game. This is a 2-player card game where a a deck of 52 cards is divided into 2 sets of 26, 1 set per player.
 #When each player presses their "deal" key, the card on the top of their deck is played.
 #If the current card's "face value" - i.e jack or king or 2 - matches the previous card face value, then the first player to press their "SNAP"
-#--key wins the round. The cards are then re-allocated and another round begins.
-#After 5 rounds, the overall winner is declared (printed to screen)
+#--key wins the round and a score board is printed to the terminal. The cards are then re-allocated and another round begins.
+#After 5 rounds, the overall winner is declared and a final score board is printed to the terminal.
 
 
 
@@ -358,7 +358,8 @@ main_deck = DECK()
 #--The number of the player that called SNAP is passed to the function and assigned to the "player" variable.
 def check_snap(player):
               
-    #--IF statement code block will execute if length of the "gameboard" list is less than 2 
+    #--IF statement code block will execute if the number of items in the "gameboard" list is less than 2 
+    #--The number of items in the "gameboard" list is obtained using the "len" function
     #--(This means that there is either 1 or 0 CARD objects in the gameboard list, so there aren't enough CARD objects in the list to 
     #--compare for a match. At least 2 CARD objects are needed before a match can be checked)
     #--The purpose of this IF statement is to prevent an error occuring from trying to compare 2 objects from the gameboard
@@ -366,13 +367,13 @@ def check_snap(player):
     if len(gameboard) < 2:
         #--The IF statement code block prints out 2 blank lines, plus an error message stating that there aren't enough cards in play
         #--for a SNAP to occur. Finally, the block returns a "True" boolean value back to the line that called the function, meaning the
-        #--WHILE loop for the current round will need to loop again, so the round can continue.
+        #--WHILE loop for the current round will need to loop again, and the round will continue.
         print("")
         print("ERROR - There aren't enough cards in play to SNAP!")
         print("")
         return True
     
-    #--ELSE statement code block will execute if length of the "gameboard" list is more than or equal to 2 
+    #--ELSE statement code block will execute if the number of items in the "gameboard" list is more than or equal to 2 
     #--(This means that there is at least 2 CARD objects in the gameboard list, so there are enough CARD objects in the list to 
     #--compare for a match.) The purpose of this ELSE statement is to compare the 2 CARD objects currently in the last 2 indicies of the "gameboard"
     #--list. These 2 CARD object represent the last 2 cards to be placed on the gameboard, during the round. The code block uses a nested 
@@ -398,7 +399,7 @@ def check_snap(player):
             #--5 rounds, an overall winner can be declared, based on the mode value within the "scoreboard" list. For a full explanation of this, see the
             #--"printScoreboard" function below. 
             #--Finally, the block returns a "False" boolean value back to the line that called the function, meaning the
-            #--WHILE loop for the current round will not need to loop again, and the current round can end.
+            #--WHILE loop for the current round will not need to loop again, and the current round will end.
             print("")
             print("SNAP! Player {} wins this round!".format(str(player)))
             print("")
@@ -408,12 +409,17 @@ def check_snap(player):
             #--The ELSE statement code block prints out 2 blank lines, plus a failure message stating that player that called SNAP is incorrect 
             #--and is possibly trying to cheat. 
             #--Finally, the block returns a "True" boolean value back to the line that called the function, meaning the
-            #--WHILE loop for the current round will need to loop again, so the round can continue.
+            #--WHILE loop for the current round will need to loop again, and the round will continue.
             print("")
             print("NO SNAP! The cards do not match. No cheating!")
             print("")
             return True
 
+#--Defined a function called "printInstructions". The function accepts no parameters, and returns to values. 
+#--The purpose of this function is to print multiple strings to the terminal that make up the initial game instructions 
+#--that will inform the user how to play the game.
+#--The reason why I have chosen to put these print statements into a function, rather than simple in the main game code block
+#--is purely for the sake of keeping my code tidy
 def printInstructions():
     print("")
     print("Classic SNAP! card game")
@@ -436,7 +442,11 @@ def printInstructions():
     print("5 rounds are played and the player with the most rounds won is declared the overall winner of the game!")
     print("")
     print("")
-    
+
+
+#--Defined a function called "printControls". The function accepts no parameters, and returns to values. 
+#--The purpose of this function is to print multiple strings to the terminal that make up the a reminder of the controls for the game
+#--These lines will print out at the top of the terminal during every round
 def printControls():
     print("")
     print("Classic SNAP! card game")
@@ -447,9 +457,19 @@ def printControls():
     print("Player 2 controls: Press K to deal a card and press P to SNAP")
     print("REMEMBER: you must also press ENTER after each key")
     print("")
-    
+
+
+#--Defined a function called "printScoreboard". The function accepts no parameters, and returns to values. 
+#--The purpose of this function is to clear the terminal, thenprint multiple strings to the terminal that make up the a 
+#--visual representation of the current scoreboard.
+#--The terminal will be cleared and the scoreboard will be printed out at the end of every round of the game
 def printScoreboard():
+    
+    #--Call the "system" method of the "os" module, in order to execute the windows command prompt command "cls". This command will clear the terminal
+    #--before the scoreboard is printed.
     os.system("cls")
+    
+    #--The next 8 lines will print out blank spaces, a header and the beginning of the scoreboard table
     print("")
     print("==SCOREBOARD==")
     print("--------------")
@@ -458,56 +478,177 @@ def printScoreboard():
     print("---------------------")
     print("| Player    | Score |")
     print("|-----------|-------|")
+    
+    #--The next two lines print out the strings that make up the main content for the scoreboard, namely the current scores for each player.
+    #--The current scores for each player are inserted into the placeholder braces in the string in the following way:
+    #--1. The current score for the player is obtained by calling the "count" method on the "scoreboard" list, in order to query to number of occurences
+    #----of each player's number in the list. For example, if player 2 has won 3 rounds at this point, then the integer value "2" will occur in the 
+    #----in the "scoreboard" list 3 times. This integer value is then passed as a parameter to the "format" method for the string to print.
+    #--2. The "format" method of the string is called and passed the parameter from step 1. The formatting type :^7 is used between the placeholder
+    #----braces in the string to print. This means that the integer value representing the player's score will be centrally aligned within a 7
+    #----character space. This formatting type is used to ensure that the visual representation of the scoreboard that is printer to the terminal
+    #----will look correct, no matter the size of the integer that is passed to the format method.
     print("| Player 1  |{:^7}|".format(scoreboard.count(1)))
     print("| Player 2  |{:^7}|".format(scoreboard.count(2)))
+    
+    #--The next 3 lines will print out the bottom edge of the scoreboard, plus two blank lines
     print("---------------------")
     print("")
     print("")
-    input("Press ENTER to continue")
     
+    #--The program prompts the user to press ENTER to continue, using the input function. Using "input" means that the program is paused until the user 
+    #--enters a key.
+    #--This is to allow the player's to look at the scoreboard before moving on to the next round or ending the game
+    input("Press ENTER to continue")
+
+
+#--Defined a function called "getWinner". The function accepts no parameters. The function will return an integer value that represents
+#--the overall winner of the game. 
+#--The purpose of this function is to check which player is the overall winner at the end of 5 rounds of the game  
 def getWinner():
+    
+    #--IF statement code block will execute if number of occurences of the integer value 1 is more than the number of occurences of the integer
+    #--value 2, in the "scoreboard" list variable. This would mean that player 1 has won more rounds than player 2 and is the overall winner of
+    #--the game. The "count" method is called on the "scoreboard" list to query the number of occurences of the passed integer values. An integer
+    #--value of 1 is passed to the "count" method to query how many occurences of 1 there are (representing the number of rounds player 1 has won), 
+    #--and then the same is done for the integer value 2.
     if scoreboard.count(1) > scoreboard.count(2):
+        #--If the above IF statement evaluates to True (meaning the overall winner of the game is player 1), then an integer value of 1 is
+        #--passed by to the line that called the function
         return 1
+    
+    #--ELSE statement code block will execute the logical opposite of the above IF statement is True, i.e if number of occurences of the integer 
+    #--value 2 is more than the number of occurences of the integer value 1, in the "scoreboard" list variable. 
+    #--This would mean that player 2 has won more rounds than player 1 and is the overall winner of the game. 
     else:
+        #--If the above ELSE statement evaluates to True (meaning the overall winner of the game is player 2), then an integer value of 2 is
+        #--passed by to the line that called the function
         return 2
 
-#===================================================================================
-        
-main_deck.populateDeck()#--Invokation of "populateDeck" method, for the "main_deck" DECK object, using dot notation
+#=====================================================================================================================================================================
 
-printInstructions()
+#=============================MAIN PROGRAM START POINT====================================
+ 
+#--Invocation of "populateDeck" method, on the "main_deck" DECK object, using dot notation
+#--This method will create 52 objects of the CARD class and append each one to the "cards" instance variable
+#--of the "main_deck" object.    
+main_deck.populateDeck()
 
+printInstructions()#--The "printInstructions" method is called, in order to print the game instructions to the terminal
+
+#--2 blank lines are printed. In between those lines, the program prompts the user to press ANY KEY TO BEING, using the input function. 
+#--Using "input" means that the program is paused until the user enters a key.
+# #--This is to allow the player's to look at the game instructions before beginning the game
 print("")
 input("PRESS ANY KEY TO BEGIN")
 print("")
 
-round_count = 1
+#--Declare a variable called "round_count".
+#--This variable will be used as an accumulator to keep track of how many rounds of SNAP have been played
+#--during this game
+round_count = 0
 
+
+#--This WHILE loop code block will execute on a loop for as long as the value assigned to the "round_count" is less than 5.
+#--This is because the game will only allow 5 rounds of SNAP to be played before the overall winner is declared and the game is over
+#--The program will continue as long as the WHILE loop condition is True. Else the loop will be broken and the program will end
 while (round_count < 5):
+    
+    #---The next 5 lines are executed at the beginning of every round. First, the "shuffle" method is invoked on the "main_deck" DECK object, 
+    #--using dot notation. This method will perform 52 random swaps of the CARD objects within the "cards" list of the "main_deck" object. This 
+    #--randomization represents the shuffling of the deck of cards before a round of SNAP.
+    
+    #--The next line invokes the "deal" method on the "main_deck" object. This method will divide the 52 CARD objects into 2 sets of 26 CARD objects
+    #--and append each of those sets to 2 new lists. Those list are then returned from the method and assigned to the lists "p1_deck" and "p2_deck" respectively.
+    #--This represents the dealing of all the cards from a deck to the 2 players before each round of SNAP. The "p2_deck" and "p2_deck" lists represent
+    #--the set of 26 cards that each player has at the beginning of a round of SNAP.
+   
+    #--The third line assigns a boolean value of True to the "round_continue" variable. This variable is used in the next WHILE loop to determine whether
+    #--or not to loop again and continue the current round. At the beginning of each round, the "round_continue" variable must be explicitly assigned
+    #--a value of True to ensure that the WHILE loop will loop at least once
+    
+    #--The fourth line takes a value equal to the current number of items in the "scoreboard" list, plus 1, and assigns it to the "round_count" list.
+    #--The "len" function is used to obtain the number of items in the "scoreboard" list
+    #--This is the way the the program keeps a track of how many rounds have been played, and what number the current round is.
+    #--The logic behind this is that the number of items in the "scoreboard" list must always be 1 integer value less than the current round. This is 
+    #--because an additional value is always added to the "scoreboard" list at the end of every round. For example, at the end of round 3, a third
+    #--value is appended to the "scoreboard" list. The next round will be round 4, which is equal to the current number of items in "scoreboard", plus 1
+    
+    #--Finally, the fifth line declares a variable called "last_player" and assigns an integer value of 0 to it. This variable is used to keep track
+    #--of which player was the last one to play a card onto the gameboard. As SNAP is a turn-based game, this variable is needed to allow the program
+    #--to ensure that players play in turn. During the game, if player 1 plays a card onto the gameboard, then "last_player" will be assigned a value
+    #--of 1 to indicate to the program that player 2 must play next. The initial value of 0 means that the round has only just begun, so neither player
+    #--has played a card yet, and either will be able to play the first card.
     
     main_deck.shuffle()
     p1_deck, p2_deck = main_deck.deal()
     round_continue = True
     round_count = len(scoreboard)+1
-      
     last_player = 0   
     
+    #--This WHILE loop code block will execute on a loop for as long as the value assigned to the "round_continue" is True.
+    #--This is used to ensure that the current round of SNAP continues until either: 
+    #--a) a player has won the round by successfully calling snap and matching 2 cards.
+    #--b) both players have played all 26 of their cards and neither of them called snap for the entire round.
+    #--Either way, this WHILE loop will then break, the current round will end and the first WHILE loop will be tested again, to see if another
+    #--round will be played
     while round_continue == True:
         
+        #--Call the "system" method of the "os" module, in order to execute the windows command prompt command "cls". This command will clear the terminal
+        #--before the round begins
         os.system('cls')
         
-        printControls()
+        printControls()#--At the beginning of every round, the game controls are printed at the top of the terminal, by calling the "printControls" function
         
+        #--The next 3 lines print out a "header" for the round, which informs the players which round of the game they are currently playing
+        #--In order to achieve this, the integer value currently assigned to "round_count" (which is the number of the current round) is converted
+        #--to a string (using the str function), and passed to the format method of the string to be printed. This will insert the "round_count" value 
+        #--into the placeholder braces within the string.
+        #--The header string is underlined and followed by a blank line
         print("Round: {}".format(str(round_count)))
         print("==========")
         print("")
         
+        #--The purpose of the next IF ELSE statement is to print out a graphical representation of the most recent CARD object to be 
+        #--played to the gameboard. This is also referred to as the "top card". 
+        #--First, the IF statement checks to see if there are any cards currently on the gameboard. If not, 
+        #--then the round has just begun and no cards have been played, so there is no "top card" CARD object to print to the terminal.
+        #--ELSE, if there are cards on the gameboard, then the "top card" CARD object needs to be printed to the terminal. 
+        #--This is a key game mechanic, as players need to be able to see the sequence of CARD objects as they are played, and attempt to 
+        #--call SNAP when they believe that the face value of the current "top card" CARD object matches the face value of the previous "top card"
+        
+        #--IF statement code block will execute if number of items in the "gameboard" list is equal to 0.
+        #--The "len" function is used to obtain the number of items in the "gameboard" list.
+        #--The "gameboard" list is used to store the CARD objects that have been played, during a round of SNAP.
+        #--If there are 0 items in the "gameboard" list, it means that no cards have been played.
         if len(gameboard) == 0:
-            print("Top Card: ")
+            
+            #--IF no cards have yet been played onto the gameboard, then there are no CARD objects to print to the terminal.
+            #--The program simply prints a "Top Card:" indicator string, with nothing after it, indicating to the players that
+            #--the "top card" will be shown below this string.
+            print("Top Card:")
+        
+        #--ELSE statement code block will execute if number of items in the "gameboard" list is more than 0.
+        #--The "len" function is used to obtain the number of items in the "gameboard" list.
+        #--If there are more that 0 items in the "gameboard" list, it means that at least 1 card has been played to the gameboard
+        #--and the most recently played card must be printed to the terminal
         else:
+            #--The "Top Card:" indicator string is printed, to tell the players that the card shown below this string
+            #--is the most recent card to be played to the gameboard. A blank line is printed below that string.
             print("Top Card:")
             print("")
-            print("{}".format(gameboard[-1]))
+            
+            #--A graphical representation of the "top card" CARD object is printed to the terminal.
+            #--The most recent CARD object that has been played is obtained by referencing the -1 index of the gameboard list.
+            #--The -1 index will always contain the very last item to be appended to the list, no matter how many items
+            #--are in the list. Each time a player plays a card to the gameboard, a CARD object is removed from their player deck and
+            #--appended to the "gameboard" list. Therefore the very last index in the "gameboard" list always contains the most recent CARD
+            #--object to be played to the gameboard.
+            #--The graphical representation of the CARD object is achieved by passing the CARD object into the "print" function. The string that
+            #--is returned by the function to the terminal is defined by the "__str__" method of the "CARD" object.
+            #--This string has been designed in a way that resembles a real life playing card. For a more detailled description of this
+            #--functionality, see the "__str__" method of the CARD class.
+            print(gameboard[-1])
         
         key_pressed = str(input("Press a key, then press ENTER: ")).upper()
         
@@ -570,6 +711,4 @@ print("||After 5 rounds, the overall winner is Player {}! Congratulations!||".fo
 print("=====================================================================")
 print("")
 print("")
-input("Press ENTER to quit")           
-
-        
+input("Press ENTER to quit")    
