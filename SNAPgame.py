@@ -586,11 +586,11 @@ while (round_count < 5):
     round_count = len(scoreboard)+1
     last_player = 0   
     
-    #--This WHILE loop code block will execute on a loop for as long as the value assigned to the "round_continue" is True.
+    #--This nested WHILE loop code block will execute on a loop for as long as the value assigned to the "round_continue" is True.
     #--This is used to ensure that the current round of SNAP continues until either: 
     #--a) a player has won the round by successfully calling snap and matching 2 cards.
     #--b) both players have played all 26 of their cards and neither of them called snap for the entire round.
-    #--Either way, this WHILE loop will then break, the current round will end and the first WHILE loop will be tested again, to see if another
+    #--Either way, this nested WHILE loop will then break, the current round will end and the first WHILE loop will be tested again, to see if another
     #--round will be played
     while round_continue == True:
         
@@ -650,65 +650,225 @@ while (round_count < 5):
             #--functionality, see the "__str__" method of the CARD class.
             print(gameboard[-1])
         
+        #--The next line of code is the primary method for recording an inputted key during the game. 
+        #--During each round, each player has 2 possible keys they can press, their "Deal" key and their "Snap" key.
+        #--The way this mechanic works is this:
+        #--At the beginning of a round, the program will wait for user input, using the "input" function and outputting the string "Press a key, then press ENTER:"
+        #--When a player presses a key, the value they entered goes through 2 transformations:
+        #----1. The value is converting to a string, in order to be able to call the "upper" method on the string
+        #----2. The value is converted to upper case, using the "upper" method, which is called on the string. This reason for converting to upper case
+        #----is to reduce the number of values to test for in the match case statement below. The match case does not also have to check for lower case
+        #----values.
+        #--The inputted and converted value is then assigned to the variable name "key_pressed"
         key_pressed = str(input("Press a key, then press ENTER: ")).upper()
         
         
+        #--This match case statement is used to progress the game based on the key that a player pressed during the game.
+        #--Each player has 2 valid keys they can press, meaning there are only 4 valid values that will progress the game
+        #--Also, as this is a turn-based game, a player will not be able to press they "Deal" key twice in a row.
+        #--Either player can press they "Snap" key at any point in the game
+        #--The conditional variable that is tested with this match case statement is "key_pressed", which currently contains the 
+        #--value of the most recent key that a player entered during the game
+        #--The match case statement will only ever evaluate 1 case condition at a time, as each of the case conditions are mutually exclusive
         match key_pressed:
+            #--CASE 1: If the value assigned to "key_pressed" is "D". This means that player 1 has pressed their "Deal" key.
             case "D":
+                #--IF statement code block will execute if the value currently assigned to the variable "last_player"
+                #--is the integer value 1. This means that the last player that played a card to the gameboard was player 1
+                #--and since player 1 is attempting to play another card again, this turn is invalid. It is player 2's
+                #--turn to play a card.
                 if last_player == 1:
+                    #--The if statement code block will print out 2 blank lines and an error message stating that it is player 2's
+                    #--turn. No cards are played to the gameboard. The "input" command is used to pause the program until a player
+                    #--presses a key to continue. The pause is to allow the players to read the error message before the program continues.
+                    #--When a player presses a key, the game will continue. None of the other case conditions will evaluate to True 
+                    #--so the match case statement will end and the nested WHILE loop will loop again and continue the current round
                     print("")
                     print("ERROR - Player 2 must play a card next")
                     print("")
                     input()
+                #--ELIF statement code block will execute if the value currently assigned to the variable "last_player"
+                #--is not integer value 1 (IF statement evaulated to false - meaning it is player 1's turn) AND if the number of items in
+                #--the "p1_deck" list is not 0. The number of items in the "p1_deck" list is obtained using the "len" function and passing the "p1_deck"
+                #--list as a parameter. If the number of items in "p1_deck" is 0, this means that player 1 has played all 26 of their allocated cards
+                #--and there are no CARD objects left in the "p1_deck" list. Unless the other player has a card left, then the cards will need to be
+                #--re-dealt from the main_deck and this round will begin again. And since this means there was no winner to this round, 
+                #--the "round_count" variable will not be incremented. For a round to be over, there must be a winner
                 elif len(p1_deck) == 0:
+                    #--The elif statement code block will print out 2 blank lines and an error message stating that player 1 has no more cards, and
+                    #--that this round will begin again. The "input" command is used to pause the program until a player
+                    #--presses a key to continue. The pause is to allow the players to read the error message before the program continues.
+                    #--When a player presses a key, the game will continue. None of the other case conditions will evaluate to True 
+                    #--so the match case statement will end and the nested WHILE loop will NOT loop again because the boolean value assigned
+                    #--to the "round_continue" variable is set to "False". Instead, the main WHILE loop will loop again, all the CARD objects will
+                    #--be returned to the "cards" list of the "main_deck" object. Then they will be shuffled and re-dealt. Then the current round
+                    #--will begin again.
                     print("")
                     print("ERROR - Player 1 has no more cards. Cards will be re-dealt and the round will begin again")
                     print("")
                     input()
                     round_continue = False
+                #--ELSE statement code block will execute if the value currently assigned to the variable "last_player"
+                #--is not integer value 1 (IF statement evaulated to false - meaning it is player 1's turn) AND if the number of items in
+                #--the "p1_deck" list is MORE than 0 (meaning player 1 still has cards in their deck). This means that player 1 can play a card.
                 else:
+                    #--The else statement code block will remove the last CARD object from the end of the "p1_deck" list, using the "pop" method on the list, and then
+                    #--pass that CARD object to the "append" method called by the "gameboard" list. This will append the last CARD object in the player's 
+                    #--deck to the end of the gameboard list. This CARD object then becomes the "top card". This represents the player taking the top card from
+                    #--their deck and placing it on top of card stack on the gameboard. Since player 1 successfully played a card, an integer value of 1
+                    #--is assigned to the "last_player" variable, to indicate to the program that the last player to successfully play a card was player 1, 
+                    #--so it should be player 2's turn next.
+                    #--Once these 2 lines have executed, the game will continue. None of the other case conditions will evaluate to True 
+                    #--so the match case statement will end and the nested WHILE loop will loop again and continue the current round, printing
+                    #--out the new "top card" to the terminal
                     gameboard.append(p1_deck.pop())
                     last_player = 1
+            #--CASE 2: If the value assigned to "key_pressed" is "K". This means that player 2 has pressed their "Deal" key.
             case "K":
+                #--IF statement code block will execute if the value currently assigned to the variable "last_player"
+                #--is the integer value 2. This means that the last player that played a card to the gameboard was player 2
+                #--and since player 2 is attempting to play another card again, this turn is invalid. It is player 1's
+                #--turn to play a card.
                 if last_player == 2:
+                    #--The if statement code block will print out 2 blank lines and an error message stating that it is player 1's
+                    #--turn. No cards are played to the gameboard. The "input" command is used to pause the program until a player
+                    #--presses a key to continue. The pause is to allow the players to read the error message before the program continues.
+                    #--When a player presses a key, the game will continue. None of the other case conditions will evaluate to True 
+                    #--so the match case statement will end and the nested WHILE loop will loop again and continue the current round
                     print("")
                     print("ERROR - Player 1 must play a card next")
                     print("")
                     input()
+                #--ELIF statement code block will execute if the value currently assigned to the variable "last_player"
+                #--is not integer value 2 (IF statement evaulated to false - meaning it is player 2's turn) AND if the number of items in
+                #--the "p2_deck" list is not 0. The number of items in the "p2_deck" list is obtained using the "len" function and passing the "p2_deck"
+                #--list as a parameter. If the number of items in "p2_deck" is 0, this means that player 2 has played all 26 of their allocated cards
+                #--and there are no CARD objects left in the "p2_deck" list. Unless the other player has a card left, then the cards will need to be
+                #--re-dealt from the main_deck and this round will begin again. And since this means there was no winner to this round, 
+                #--the "round_count" variable will not be incremented. For a round to be over, there must be a winner
                 elif len(p2_deck) == 0:
+                    #--The elif statement code block will print out 2 blank lines and an error message stating that player 2 has no more cards, and
+                    #--that this round will begin again. The "input" command is used to pause the program until a player
+                    #--presses a key to continue. The pause is to allow the players to read the error message before the program continues.
+                    #--When a player presses a key, the game will continue. None of the other case conditions will evaluate to True 
+                    #--so the match case statement will end and the nested WHILE loop will NOT loop again because the boolean value assigned
+                    #--to the "round_continue" variable is set to "False". Instead, the main WHILE loop will loop again, all the CARD objects will
+                    #--be returned to the "cards" list of the "main_deck" object. Then they will be shuffled and re-dealt. Then the current round
+                    #--will begin again.
                     print("")
                     print("ERROR - Player 2 has no more cards. Cards will be re-dealt and the round will begin again")
                     print("")
                     input()
                     round_continue = False
+                #--ELSE statement code block will execute if the value currently assigned to the variable "last_player"
+                #--is not integer value 2 (IF statement evaulated to false - meaning it is player 1's turn) AND if the number of items in
+                #--the "p2_deck" list is MORE than 0 (meaning player 2 still has cards in their deck). This means that player 2 can play a card.
                 else:
+                    #--The else statement code block will remove the last CARD object from the end of the "p2_deck" list, using the "pop" method on the list, and then
+                    #--pass that CARD object to the "append" method called by the "gameboard" list. This will append the last CARD object in the player's 
+                    #--deck to the end of the gameboard list. This CARD object then becomes the "top card". This represents the player taking the top card from
+                    #--their deck and placing it on top of card stack on the gameboard. Since player 2 successfully played a card, an integer value of 2
+                    #--is assigned to the "last_player" variable, to indicate to the program that the last player to successfully play a card was player 2, 
+                    #--so it should be player 1's turn next.
+                    #--Once these 2 lines have executed, the game will continue. None of the other case conditions will evaluate to True 
+                    #--so the match case statement will end and the nested WHILE loop will loop again and continue the current round, printing
+                    #--out the new "top card" to the terminal
                     gameboard.append(p2_deck.pop())
                     last_player = 2
+            #--CASE 3: If the value assigned to "key_pressed" is "P". This means that player 2 has pressed their "Snap" key.
             case "P":
+                #--If player 2 pressed their snap key, then they have attempted to call Snap! because they believe that the face value of the 
+                #--current "top card" matches the face value of the previous "top card"
+                #--In order to check if they have correctly called Snap!, the "check_snap" function is called, and an integer value of 2 is passed.
+                #--This value will indicate to the function which player called snap! and, if they are correct, which player to allocate a point
+                #--to on the scoreboard.
+                #--The "check_snap" function will also return a boolean value which will be assigned to the "round_continue" variable.
+                #--This is to indicate to the program whether to continue the current round or start a new one. If the "check_snap" function identifies
+                #--that the player did NOT correctly call snap, then a value of True will be returned and the nested WHILE loop will loop again 
+                #--and continue the current round. If the "check_snap" function identifies that the player DID correctly call snap, then a value of 
+                #--False will be returned and the nested WHILE loop will NOT loop again. The main WHILE loop will loop again and a new round will begin.
                 round_continue = check_snap(2)
+                #The "input" command is used to pause the program until a player
+                #--presses a key to continue. The pause is to allow the players to read the "congratulations - successful snap" message 
+                #--before the program continues. (This message is printed by the "check_snap" function.
+                #--When a player presses a key, the game will continue. None of the other case conditions will evaluate to True 
+                #--so the match case statement will end
                 input()
+            #--CASE 4: If the value assigned to "key_pressed" is "Q". This means that player 1 has pressed their "Snap" key.
             case "Q":
+                #--If player 1 pressed their snap key, then they have attempted to call Snap! because they believe that the face value of the 
+                #--current "top card" matches the face value of the previous "top card"
+                #--In order to check if they have correctly called Snap!, the "check_snap" function is called, and an integer value of 1 is passed.
+                #--This value will indicate to the function which player called snap! and, if they are correct, which player to allocate a point
+                #--to on the scoreboard.
+                #--The "check_snap" function will also return a boolean value which will be assigned to the "round_continue" variable.
+                #--This is to indicate to the program whether to continue the current round or start a new one. If the "check_snap" function identifies
+                #--that the player did NOT correctly call snap, then a value of True will be returned and the nested WHILE loop will loop again 
+                #--and continue the current round. If the "check_snap" function identifies that the player DID correctly call snap, then a value of 
+                #--False will be returned and the nested WHILE loop will NOT loop again. The main WHILE loop will loop again and a new round will begin.
                 round_continue = check_snap(1)
+                #The "input" command is used to pause the program until a player
+                #--presses a key to continue. The pause is to allow the players to read the "congratulations - successful snap" message 
+                #--before the program continues. (This message is printed by the "check_snap" function.
+                #--When a player presses a key, the game will continue. None of the other case conditions will evaluate to True 
+                #--so the match case statement will end
                 input()
+            #--CASE 5 - default case: This case condition is the "default", meaning it will evaluate to True if
+            #--none of the other case statement evaluated to true. If none of the other case statements evaluated to true, then a player 
+            #--has inputted an invalid key. Only 4 keys are valid, namely D, K, Q and P.
             case default:
+                #--The case statement code block will print out 2 blank lines and an error message stating that a player
+                #--has inputted an invalid key. No cards are played to the gameboard. The "input" command is used to pause the program until a player
+                #--presses a key to continue. The pause is to allow the players to read the error message before the program continues.
+                #--When a player presses a key, the game will continue. None of the other case conditions will evaluate to True 
+                #--so the match case statement will end and the nested WHILE loop will loop again and continue the current round
                 print("")
                 print("ERROR - Invalid key pressed. Only 'D', 'K', 'Q' and 'P' are valid")
                 print("")
                 input()       
-                
+    
+    #--The following 4 lines of code are executed at the end of every round, after the nested WHILE loop has been broken out of. There are only 2 
+    #--reasons that the nested WHILE loop will be broken. Either a player has correctly called snap! and won a round, or both players have run out of
+    #--cards and neither has successfully called snap! during the round. Either way, all of the CARD objects must be returned to the "main_deck", 
+    #--then reshuffled, and re-dealt.
+    #--The first 3 lines are for returning all CARD objects from the current round back to the "cards" list of the "main_deck" list object. This is done
+    #--by calling the "returnCard" method for the "DECK" class, on the "main_deck" DECK object, and passing each list that may contain CARD objects, in turn.
+    #--The 3 lists that may contain CARD objects are "gameboard", "p1_deck" and "p2_deck". The "returnCards" function then appends any CARD objects contained
+    #--in the passed list object to the "cards" list of the DECK object that called the "returnCards" method, namely the "main_deck" object, in this instance
+    #--Then, each time the "returnCards" method is called, it returns a blank list object, which is then assigned to the same list object that was passed
+    #--to the function. This is in order to "empty" those lists, ready for the next round.
+    #--Finally, the "printScoreboard" function is called, which will print a graphical representation of the current scoreboard to the terminal
+    #--The scoreboard will be shown at the end of every round
+    #--The main WHILE loop will then loop again, re-shuffle and re-deal the CARD objects from the "main_deck" object's list into the "p1_deck" and "p2_deck"
+    #--lists, ready for another round to begin            
     gameboard = main_deck.returnCards(gameboard)
     p1_deck = main_deck.returnCards(p1_deck)
     p2_deck = main_deck.returnCards(p2_deck)  
-    
     printScoreboard()  
 
+#--The following 10 lines will execute after the main WHILE loop has been broken out of. If the main WHILE loop has been broken out of, then
+#--the value of "round_count" currently equals integer 5. This means that 5 successful rounds of Snap! have been played, and it is time to declare
+#--the overall winner and end the game.
+
+#--The first 4 lines print out 3 blank lines and a "GAME OVER" message to the terminal
 print("")
 print("")
 print("GAME OVER")
 print("")
+
+#--The next 3 line print out 2 divider lines and a congratulating message, informing the players who is the overall winner of the game.
+#--In order to calculate and display the overall winner to the terminal, the "getWinner" function is called.
+#--This function evaluates the "scoreboard" list and returns an integer value equal to the number of the player who is the overall winner
+#--THen the integer value is converted to a string (using the str function), and passed to the format method of the string to be printed. 
+#--This will insert the integer value into the placeholder braces within the string.
 print("=====================================================================")
-print("||After 5 rounds, the overall winner is Player {}! Congratulations!||".format(getWinner()))
+print("||After 5 rounds, the overall winner is Player {}! Congratulations!||".format(str(getWinner())))
 print("=====================================================================")
+
+#--Finally, 2 more blank lines are printed to the terminal, then the "input" command is used to pause the program until a player
+#--presses a key to continue. The prompt string "Press ENTER to quit" is outputted to the terminal.
+#--The pause is to allow the players to read the "congratulations" message before the program ends.
+#--When a player presses a key, the program will end. 
 print("")
 print("")
 input("Press ENTER to quit")    
