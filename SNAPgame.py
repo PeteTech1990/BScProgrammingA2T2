@@ -258,7 +258,7 @@ class CARD:
         #--this row contain 1 placeholder {}, which uses the formatting type :^10, meaning the value that will be held within this brace will
         #--be centrally aligned within a 10 character space, respectively. The value passed into these 2 placeholders is the CARD's "suit" value. 
         #--This emulates the suit symbol that appears in the centre of a playing card. The total space between the two "|" symbols is 10 characters.
-        #--Altogether, these seven rows produce a multiline string that resembles a real-life playing card.
+        #--Altogether, these seven rows produce ASCII art that resembles a real-life playing card.
         return """------------
 |{:<5}{:>5}|
 |          |
