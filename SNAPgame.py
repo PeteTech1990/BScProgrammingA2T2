@@ -218,7 +218,7 @@ class DECK:
             
     
 #--Defined a class called CARD. This class has three instance attributes, a string variable called "suit",a string variable called "fvalue" and an integer variable
-#--called "ID". This class also has five methods, the initialise method, the __str__ method, the "getSuit", "getFVal" and "getID" methods. These will be
+#--called "ID". This class also has five methods, the initialise method, the __str__ method, the "getFVal" and "getID" methods. These will be
 #--explained lower down.
 #--CARD objects represent individual cards in the game. Their will be 52 CARD objects in the game, representing a real world full set of cards    
 class CARD:
@@ -267,18 +267,7 @@ class CARD:
 |{:<5}{:>5}|
 ------------""".format(self.fvalue, self.fvalue, self.suit, self.fvalue, self.fvalue)
     
-    #--Defined a method called "getSuit" The method accepts one parameter, which is assigned to the variable "self". 
-    #--"Self" will store a particular instance of a CARD object so that the program can work on the state data within that instance. 
-    #--The state data it will work on is the object's "suit" value.
-    #--The method will return the "suit" string value belonging to the particular instance of the CARD class that called this method.
-    #--The purpose of this method is to provide a way for the program to query the "suit" value for a particular CARD object
-    #--without being able to access or change the specific value itself. The "suit" value will remain "private" in terms of its encapsulation.
-    #--This is to ensure that the "suit" variables for specific CARD objects do not interfere with each other and cannot be accidentally changed by
-    #--other parts of the code. The "suit" value of a CARD object should not change once the CARD has been instantiated, as it is representing a
-    #--a real-life card, which cannot change its suit.
-    #--Only the "getSuit" function, within the specific instance of the CARD object, will be able to access the "suit" value for that object.        
-    def getSuit(self):
-        return self.suit
+ 
     
     
     #--Defined a method called "getFVal" The method accepts one parameter, which is assigned to the variable "self". 
@@ -346,7 +335,7 @@ main_deck = DECK()
 
 #=============================DEFINING FUNCTIONS====================================
 
-#--Defined a function called "check_snap". The function accepts one parameter, which will be assigned to the "player" variable. 
+#--Defined a function called "check_snap". The function accepts one parameter, which will be assigned to the "player_number" variable. 
 #--The function will return a boolean value back to the line that called the function.
 #--The purpose of this function is to check whether a player's SNAP! call is valid. 
 #--After a card is played during a round, each player will have the opportunity to press their "SNAP" key if they believe the face value of
@@ -355,8 +344,8 @@ main_deck = DECK()
 #--assigned to the variable "round_continue". A value of False means the WHILE loop for the current round does not need to loop again, as a 
 #--player has successfully matched 2 cards and the round is over.) If the 2 CARD objects are not a match, the function will return "True" 
 #--and the round will continue.
-#--The number of the player that called SNAP is passed to the function and assigned to the "player" variable.
-def check_snap(player):
+#--The number of the player that called SNAP is passed to the function and assigned to the "player_number" variable.
+def check_snap(player_number):
               
     #--IF statement code block will execute if the number of items in the "gameboard" list is less than 2 
     #--The number of items in the "gameboard" list is obtained using the "len" function
@@ -392,18 +381,18 @@ def check_snap(player):
             #--The IF statement code block prints out 2 blank lines, plus a success message stating that player that called SNAP is correct and has won
             #--the round. The success message string uses the format method to insert the number of the player that called SNAP into the placeholder
             #--braces within the string.
-            #--The number of the player that called SNAP was passed to the function and assigned to the variable "player". The value that was passed
+            #--The number of the player that called SNAP was passed to the function and assigned to the variable "player_number". The value that was passed
             #--is an integer value, so before it is inserted into the placeholder braces, it is converted to a string value using the "str" function.
-            #--After the 2 blank lines and the success message, the value that is currently held in the "player" variable (the number of the player who
+            #--After the 2 blank lines and the success message, the value that is currently held in the "player_number" variable (the number of the player who
             #--called SNAP) is appended to the "scoreboard" list. The purpose of this is to record the winner of the current round, so that after
             #--5 rounds, an overall winner can be declared, based on the mode value within the "scoreboard" list. For a full explanation of this, see the
             #--"printScoreboard" function below. 
             #--Finally, the block returns a "False" boolean value back to the line that called the function, meaning the
             #--WHILE loop for the current round will not need to loop again, and the current round will end.
             print("")
-            print("SNAP! Player {} wins this round!".format(str(player)))
+            print("SNAP! Player {} wins this round!".format(str(player_number)))
             print("")
-            scoreboard.append(player)
+            scoreboard.append(player_number)
             return False
         else:
             #--The ELSE statement code block prints out 2 blank lines, plus a failure message stating that player that called SNAP is incorrect 
