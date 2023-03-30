@@ -38,7 +38,7 @@ class DECK:
     #--This is an attribute that the DECK object will need during the game. The attribute "cards" is assigned a blank list, initially.
     def __init__(self):
         self.cards = []
-     
+    
        
     #--Defined a method called "populateDeck". Method accepts one parameter, which is assigned to the variable "self". "Self" will store a particular instance of
     #--a DECK object so that the program can act on the state data within that instance. The state data it will work on is the object's "cards" list.
