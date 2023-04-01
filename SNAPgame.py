@@ -449,7 +449,7 @@ def printControls():
 
 
 #--Defined a function called "printScoreboard". The function accepts no parameters, and returns to values. 
-#--The purpose of this function is to clear the terminal, thenprint multiple strings to the terminal that make up the a 
+#--The purpose of this function is to clear the terminal, then print multiple strings to the terminal that make up the a 
 #--visual representation of the current scoreboard.
 #--The terminal will be cleared and the scoreboard will be printed out at the end of every round of the game
 def printScoreboard():
